@@ -1,0 +1,7 @@
+Basic Multipart Form Example
+
+Steps to setup:
+1) Place the form_handler.php file on your server, e.g. http://localhost/form_handler.php
+2) Edit the WEB_SERVICE_URL property in BasicExample.mxml to point to the form_handler.php file
+3) Publish BasicExample.mxml to the same server location you placed form_handler.php
+4) Try to upload multiple files
