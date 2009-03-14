@@ -1,0 +1,194 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="../../../../style.css" type="text/css" media="screen">
+<link rel="stylesheet" href="../../../../print.css" type="text/css" media="print">
+<meta content="URLFileVariable,co.uk.mikestead.net.URLFileVariable,data,name" name="keywords">
+<title>co.uk.mikestead.net.URLFileVariable</title>
+</head>
+<body>
+<script type="text/javascript" language="javascript" src="../../../../asdoc.js"></script><script type="text/javascript" language="javascript" src="../../../../cookies.js"></script><script type="text/javascript" language="javascript">
+<!--
+				asdocTitle = 'URLFileVariable - AS3 Library - urlrequestbuilder';
+				var baseRef = '../../../../';
+				window.onload = configPage;
+			--></script>
+<table style="display:none" id="titleTable" cellspacing="0" cellpadding="0" class="titleTable">
+<tr>
+<td align="left" class="titleTableTitle">API Documentation</td><td align="right" class="titleTableTopNav"><a onclick="loadClassListFrame('../../../../all-classes.html')" href="../../../../package-summary.html">All&nbsp;Packages</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../all-classes.html')" href="../../../../class-summary.html">All&nbsp;Classes</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../index-list.html')" href="../../../../all-index-A.html">Index</a>&nbsp;|&nbsp;<a href="../../../../index.html?co/uk/mikestead/net/URLFileVariable.html&amp;co/uk/mikestead/net/class-list.html" id="framesLink1">Frames</a><a onclick="parent.location=document.location" href="" style="display:none" id="noFramesLink1">No&nbsp;Frames</a></td><td rowspan="3" align="right" class="titleTableLogo"><img alt="Adobe Logo" title="Adobe Logo" class="logoImage" src="../../../../images/logo.jpg"></td>
+</tr>
+<tr class="titleTableRow2">
+<td align="left" id="subTitle" class="titleTableSubTitle">Class&nbsp;URLFileVariable</td><td align="right" id="subNav" class="titleTableSubNav"><a href="#propertySummary">Properties</a>&nbsp;| <a href="#methodSummary">Methods</a></td>
+</tr>
+<tr class="titleTableRow3">
+<td colspan="2">&nbsp;</td>
+</tr>
+</table>
+<script type="text/javascript" language="javascript">
+<!--
+if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Class URLFileVariable"); titleBar_setSubNav(false,true,false,false,false,false,true,false,false,false,false,false,false,false);}
+--></script>
+<div class="MainContent">
+<table cellspacing="0" cellpadding="0" class="classHeaderTable">
+<tr>
+<td class="classHeaderTableLabel">Package</td><td><a onclick="javascript:loadClassListFrame('class-list.html')" href="package-detail.html">co.uk.mikestead.net</a></td>
+</tr>
+<tr>
+<td class="classHeaderTableLabel">Class</td><td class="classSignature">public class URLFileVariable</td>
+</tr>
+</table>
+<p></p>
+     The URLFileVariable class wraps file data to be sent to the server using a URLRequest.
+          <p>To add an instance of URLFileVariable to a URLRequest you must first create a URLVariables
+     instance and then set one or more of its properties with a URLFileVariable instance. This
+     URLVariables instance should then be passed to a URLRequestBuilder which can construct
+     the URLRequest with the correct encoding to transport the file(s) to the server.</p>
+          <p></p>
+<br>
+<span class="label">Example</span>
+<br>     <pre>
+     // Construct variables (name-value pairs) to be sent to sever
+     var variables:URLVariable = new URLVariables();
+     variables.userImage = new URLFileVariable(jpegEncodedData, "user_image.jpg");
+     variables.userPDF = new URLFileVariable(pdfEncodedData, "user_doc.pdf");
+     variables.userName = "Mike";
+     // Build the request which houses these variables
+     var request:URLRequest = new URLRequestBuilder(variables).build();
+     request.url = "some.web.address.php";
+     // Create the loader and use it to send the request off to the server
+     var loader:URLLoader = new URLLoader();
+     loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onError);
+     loader.addEventListener(HTTPStatusEvent.HTTP_STATUS, onError);
+     loader.addEventListener(IOErrorEvent.IO_ERROR, onError);
+     loader.addEventListener(Event.COMPLETE, onServerResponse);
+     loader.load(request);
+     function onServerResponse(event:Event):void
+     {
+         trace("Variables uploaded successfully");
+     }
+     function onError(event:Event):void
+     {
+         trace("An error occured while trying to upload data to the server: \n" + event);
+     }
+     </pre>
+          <p></p>
+<p>
+<span class="classHeaderTableLabel">See also</span>
+</p>
+<div class="seeAlso">
+<a href="URLRequestBuilder.html" target="">URLRequestBuilder</a>
+</div>
+<br>
+<hr>
+</div>
+<a name="propertySummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Public Properties</div>
+<table id="summaryTableProperty" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#data">data</a> : ByteArray<div class="summaryTableDescription">[read-only]
+         The contents of the file
+         </div>
+</td><td class="summaryTableOwnerCol">URLFileVariable</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#name">name</a> : String<div class="summaryTableDescription">[read-only]
+         The name to be given to the file on the server
+         </div>
+</td><td class="summaryTableOwnerCol">URLFileVariable</td>
+</tr>
+</table>
+</div>
+<a name="methodSummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Public Methods</div>
+<table id="summaryTableMethod" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#URLFileVariable()">URLFileVariable</a>(data:ByteArray, name:String)</div>
+<div class="summaryTableDescription">
+         Constructor.</div>
+</td><td class="summaryTableOwnerCol">URLFileVariable</td>
+</tr>
+</table>
+</div>
+<script type="text/javascript" language="javascript">
+<!--
+showHideInherited();
+--></script>
+<div class="MainContent">
+<a name="propertyDetail"></a>
+<div class="detailSectionHeader">Property detail</div>
+<a name="data"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">data</td><td class="detailHeaderType">property</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>data:ByteArray</code>&nbsp;&nbsp;[read-only]<p>
+         The contents of the file
+         </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get data():ByteArray</code>
+<br>
+</div>
+<a name="name"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">name</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>name:String</code>&nbsp;&nbsp;[read-only]<p>
+         The name to be given to the file on the server
+         </p><span class="label">Implementation</span>
+<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;public function get name():String</code>
+<br>
+</div>
+<a name="constructorDetail"></a>
+<div class="detailSectionHeader">Constructor detail</div>
+<a name="URLFileVariable()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">URLFileVariable</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">constructor</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function URLFileVariable(data:ByteArray, name:String)</code><p>
+         Constructor.
+                  </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">data</span>:ByteArray</code> &mdash; The contents of the file to be sent to the server
+         </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">name</span>:String</code> &mdash; The name to be given to the file on the server, e.g. <code>user_image.jpg</code>
+         </td>
+</tr>
+</table>
+</div>
+<br>
+<br>
+<hr>
+<br>
+<p></p>
+<center class="copyright"> 
+</center>
+</div>
+</body>
+</html>
+<!-- -->
