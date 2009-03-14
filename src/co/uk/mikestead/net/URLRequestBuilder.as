@@ -206,8 +206,7 @@ package co.uk.mikestead.net
             // Note, we writeUTFBytes and not writeUTF because it can corrupt parsing on the server
             field.writeUTFBytes(MULTIPART_MARK + MULTIPART_BOUNDARY + LF +
                                 "Content-Disposition: form-data; name=\"" + id + "\"" + LF + LF +
-                                text);
-            field.writeUTFBytes(LF);
+                                text + LF);
             return field;
         }
 
