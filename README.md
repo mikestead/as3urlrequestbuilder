@@ -1,6 +1,6 @@
 # AS3 URLRequestBuilder
 
-## Usage Example
+### Usage Example
 
 ```as3
 // Create variables to send off to server
@@ -25,9 +25,10 @@ public function onServerResponse(event:Event):void
 }
 ```
 
-The follow blog post which originally accompanied this work has been copied here for longevity.
+
 
 ## FileReference Revisited
+The follow blog post which originally accompanied this work has been copied here for longevity.
 
 > 2009-01-04
 
