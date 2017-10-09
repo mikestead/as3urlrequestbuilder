@@ -6,11 +6,11 @@ The follow blog post which originally accompanied this work has been copied here
 
 > 2009-01-04
 
-In a recent post I outlined some of the concerns I have with the [FileReference](http://livedocs.adobe.com/flex/3/langref/flash/net/FileReference.html) class, namely:
+In a recent post I outlined some of the concerns I have with the [FileReference](http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/net/FileReference.html) class, namely:
 
 - It's responsible for providing file selection, file access, and file upload/download, which violates the [Single Responsibility Principal](http://en.wikipedia.org/wiki/Single_responsibility_principle).
 - It restricts the user to one file upload at a time, even though [multipart/form-data](http://www.faqs.org/rfcs/rfc2388.html) is used as the encoding, an encoding with no such restriction.
-- [URLLoader](http://livedocs.adobe.com/flex/3/langref/flash/net/URLLoader.html) and [URLStream](http://help.adobe.com/en_US/AS3LCR/Flash_10.0/flash/net/URLStream.html) are the preferred way to dispatch an HTTP request and retrieve a response. `FileReference` adds unnecessary duplication and restrictions when compared with these classes.
+- [URLLoader](http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/net/URLLoader.html) and [URLStream](http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/net/URLStream.html) are the preferred way to dispatch an HTTP request and retrieve a response. `FileReference` adds unnecessary duplication and restrictions when compared with these classes.
 - You can bundle other data with a `FileReference.upload` request by setting the data property of the `URLReqest` object passed to it, but the context is confusing (i.e you're explicitly uploading a file through FileReference so bundling other data is somewhat unintuitive).
 
 [Neer](http://www.neerfri.com/2007/12/flex-multipartform-data-post-request.html) put together a nice set of classes to deal with these issues, mimicking the general structure of AS3's URL `Request/Loader/Variables`. Using these you can collate text and files (binary data) to be transferred to the server within a `MultipartVariables` instance, pass this to a `MultipartRequest` and then POST this to the server using `MultipartLoader`, which will finish by returning any response.
@@ -21,7 +21,7 @@ With a little spare time over the holidays I thought I'd try to find an answer. 
 
 ### Preparing Data For the Server
 
-[URLVariables](http://help.adobe.com/en_US/AS3LCR/Flash_10.0/flash/net/URLVariables.html) is a class which allows for the dynamic setting of properties. Each one of these properties turns into a name-value string pair, to be sent to the server, when associate with a [URLRequest](http://help.adobe.com/en_US/AS3LCR/Flash_10.0/flash/net/URLRequest.html). To bind variables to a request, `URLRequest` makes public a `data` property which alongside `URLVariables`, accepts a `String` or `ByteArray` instance.
+[URLVariables](http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/net/URLVariables.html) is a class which allows for the dynamic setting of properties. Each one of these properties turns into a name-value string pair, to be sent to the server, when associate with a [URLRequest](http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/net/URLRequest.html). To bind variables to a request, `URLRequest` makes public a `data` property which alongside `URLVariables`, accepts a `String` or `ByteArray` instance.
 
 Here's an example of creating some variables to send to the server and adding them to a `URLRequest`.
 
@@ -69,7 +69,7 @@ variables.userName = ""mike"";
 variables.userThumbnail = new URLFileVariable(jpegData, ""mike.jpg"");
 ```
 
-You may have noticed this requires the file data to be in memory. We can accomplish this using the [FileReference.load](http://help.adobe.com/en_US/AS3LCR/Flash_10.0/flash/net/FileReference.html#load()) method which was introduced under Flash Player 10. This method loads the byte data of a local file into the Flash player and makes it available through the `data` property of its associated `FileReference` instance.
+You may have noticed this requires the file data to be in memory. We can accomplish this using the [FileReference.load](http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/net/FileReference.html#load()) method which was introduced under Flash Player 10. This method loads the byte data of a local file into the Flash player and makes it available through the `data` property of its associated `FileReference` instance.
 
 (My renaming of the `FileReference` instance in the following example is meant to help highlight the multiple responsibilities bundled with this class.)
 
@@ -103,9 +103,9 @@ Now this is by no means ideal. Having to preload potentially many files before s
 
 ### Constructing an Encoded HTTP Request
 
-[URLRequest](http://help.adobe.com/en_US/AS3LCR/Flash_10.0/flash/net/URLRequest.html) is responsible for encapsulating GET and POST [HTTP requests](http://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol#Request_methods). With it you can customize the headers and body of any such HTTP request to be sent to the server.  This fits perfectly with our need to POST strings and files using `multipart/form-data` encoding so we should be able to use it out of the box.
+[URLRequest](http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/net/URLRequest.html) is responsible for encapsulating GET and POST [HTTP requests](http://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol#Request_methods). With it you can customize the headers and body of any such HTTP request to be sent to the server.  This fits perfectly with our need to POST strings and files using `multipart/form-data` encoding so we should be able to use it out of the box.
 
-Our next dilemma is when to apply the encoding to a `URLRequest` and the variables it contains. Given that any `URLVariables` instance containing a property of type `URLFileVariable` would need sent using `multipart/form-data` encoding the [URLRequest.data](http://help.adobe.com/en_US/AS3LCR/Flash_10.0/flash/net/URLRequest.html#data) setter seems like the ideal location to deduce and apply this encoding. Indeed looking at the documentation for this setter you can see encodings are already deduced in this way for the other types it supports.
+Our next dilemma is when to apply the encoding to a `URLRequest` and the variables it contains. Given that any `URLVariables` instance containing a property of type `URLFileVariable` would need sent using `multipart/form-data` encoding the [URLRequest.data](http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/net/URLRequest.html#data) setter seems like the ideal location to deduce and apply this encoding. Indeed looking at the documentation for this setter you can see encodings are already deduced in this way for the other types it supports.
 
 Time to extend `URLRequest` and override this setter... ah, _URLRequest is a final class so cannot be extended_. Back to the drawing board.
 
@@ -147,11 +147,11 @@ Obviously this class won't need to do much if the variables passed in don't cont
 
 ### Dispatching a URLRequest and Monitoring Progress
 
-In order to send a URLRequest off to the server we need to ask a class, which is capable of returning a response, to dispatch the URLRequest. To do this we have a few choices, we can use [Loader](http://help.adobe.com/en_US/AS3LCR/Flash_10.0/flash/display/Loader.html), [URLLoader](http://help.adobe.com/en_US/AS3LCR/Flash_10.0/flash/net/URLLoader.html) or [URLStream](http://help.adobe.com/en_US/AS3LCR/Flash_10.0/flash/net/URLStream.html). You can view the documentation for each to get better understanding of their roles, but assuming we'll just want a simple text response `URLLoader` will do nicely.
+In order to send a URLRequest off to the server we need to ask a class, which is capable of returning a response, to dispatch the URLRequest. To do this we have a few choices, we can use [Loader](http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/display/Loader.html), [URLLoader](http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/net/URLLoader.html) or [URLStream](http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/net/URLStream.html). You can view the documentation for each to get better understanding of their roles, but assuming we'll just want a simple text response `URLLoader` will do nicely.
 
 Before we dispatch a request we'll want to register to listen for upload progress events. The loader classes above all provide exception and progress events for connecting and downloading data from a server, but provide no means to monitor uploads. `URLRequest` would be another possible place to look for upload event dispatching but as it's (quite rightly) not responsible for the transmission of itself there is no such support.
 
-You may think the next logical step would be to create our own `Loader` implementation using a [Socket](http://help.adobe.com/en_US/AS3LCR/Flash_10.0/flash/net/Socket.html). But `Socket` too has [no support](http://tech.groups.yahoo.com/group/flexcoders/message/72182) for monitoring the progress of an upload so offers no advantages. _I can find no foolproof means in Flash to monitor upload progress other than through FileReference_.
+You may think the next logical step would be to create our own `Loader` implementation using a [Socket](http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/net/Socket.html). But `Socket` too has [no support](http://tech.groups.yahoo.com/group/flexcoders/message/72182) for monitoring the progress of an upload so offers no advantages. _I can find no foolproof means in Flash to monitor upload progress other than through FileReference_.
 
 This lack of event dispatching for uploads is quite surprising given the potential for large amounts of data to be sent to the server via a `URLRequest`, not to mention via a `Socket`.
 
