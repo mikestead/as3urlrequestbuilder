@@ -1,5 +1,30 @@
 # AS3 URLRequestBuilder
 
+## Usage Example
+
+```as3
+// Create variables to send off to server
+var variables:URLVariables = new URLVariables();
+variables.userName = "mike";
+variables.userThumbnail = new URLFileVariable(jpegData, "mike.jpg");
+
+// Build the multipart encoded request and set the url of where to send it
+var request:URLRequest = new URLRequestBuilder(variables).build();
+request.url = "some.web.service.php";
+
+// Create the loader and transmit the request
+var loader:URLLoader = new URLLoader();
+loader.addEventListener(Event.COMPLETE, onServerResponse);
+loader.load(request);
+
+// Handle the response
+public function onServerResponse(event:Event):void
+{
+    var loader:URLLoader = URLLoader(event.target);
+    trace("onServerResponse: " + loader.data);
+}
+```
+
 The follow blog post which originally accompanied this work has been copied here for longevity.
 
 ## FileReference Revisited
@@ -27,8 +52,8 @@ Here's an example of creating some variables to send to the server and adding th
 
 ```as3
 var variables:URLVariables = new URLVariables();
-variables.propertyOne = ""valueOne"";
-variables.propertyTwo = ""valueTwo"";
+variables.propertyOne = "valueOne";
+variables.propertyTwo = "valueTwo";
 
 var request:URLRequest = new URLRequest();
 request.data = variables;
@@ -45,7 +70,7 @@ class URLFileVariable
 	 * Constructor
 	 *
 	 * @param data File data
-	 * @param name Name to save file under on server, e.g ""someImage.jpg""
+	 * @param name Name to save file under on server, e.g "someImage.jpg"
 	 */
 	public function URLFileVariable(data:BinaryData, name:String)
 	
@@ -55,7 +80,7 @@ class URLFileVariable
 	public function get data():ByteArray
 	
 	/**
-	 * Name to save file under on server, e.g ""someImage.jpg""
+	 * Name to save file under on server, e.g "someImage.jpg"
 	 */
 	public function get name():String
 }
@@ -65,8 +90,8 @@ With an instance of this we can set a `URLVariables` property.
 
 ```as3
 var variables:URLVariables = new URLVariables();
-variables.userName = ""mike"";
-variables.userThumbnail = new URLFileVariable(jpegData, ""mike.jpg"");
+variables.userName = "mike";
+variables.userThumbnail = new URLFileVariable(jpegData, "mike.jpg");
 ```
 
 You may have noticed this requires the file data to be in memory. We can accomplish this using the [FileReference.load](http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/net/FileReference.html#load()) method which was introduced under Flash Player 10. This method loads the byte data of a local file into the Flash player and makes it available through the `data` property of its associated `FileReference` instance.
@@ -137,8 +162,8 @@ Which could then be used like so:
 
 ```as3
 var variables:URLVariables = new URLVariables();
-variables.userName = ""mike"";
-variables.userThumbnail = new URLFileVariable(jpegData, ""mike.jpg"");
+variables.userName = "mike";
+variables.userThumbnail = new URLFileVariable(jpegData, "mike.jpg");
 
 var request:URLRequest = new URLRequestBuilder(variables).build();
 ```
@@ -157,17 +182,17 @@ This lack of event dispatching for uploads is quite surprising given the potenti
 
 So at this point we hit a significant dead end. We've come as far as to cover the functionality in Neer's version, and we've done this through the introduction of just two lightweight classes, providing greater flexibility in the process; but we can go no further.
 
-Here's the final example covering how to send a request off, and receive a response from the server (for a more comprehensive example, including user interface and server-side script, download the source code).
+Here's the final example covering how to send a request off, and receive a response from the server (for a more comprehensive example, including user interface and server-side script, view the source code).
 
 ```as3
 // Create variables to send off to server
 var variables:URLVariables = new URLVariables();
-variables.userName = ""mike"";
-variables.userThumbnail = new URLFileVariable(jpegData, ""mike.jpg"");
+variables.userName = "mike";
+variables.userThumbnail = new URLFileVariable(jpegData, "mike.jpg");
 
 // Build the multipart encoded request and set the url of where to send it
 var request:URLRequest = new URLRequestBuilder(variables).build();
-request.url = ""some.web.service.php"";
+request.url = "some.web.service.php";
 
 // Create the loader and transmit the request
 var loader:URLLoader = new URLLoader();
@@ -178,6 +203,6 @@ loader.load(request);
 public function onServerResponse(event:Event):void
 {
     var loader:URLLoader = URLLoader(event.target);
-    trace(""onServerResponse: "" + loader.data);
+    trace("onServerResponse: " + loader.data);
 }
 ```
